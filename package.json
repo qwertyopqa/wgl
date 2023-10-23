@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^3.0.3",
+    "@astrojs/vercel": "^5.0.2",
     "@fontsource/climate-crisis": "^5.0.16",
     "@fontsource/montagu-slab": "^5.0.16",
     "@types/react": "^18.2.31",
