@@ -9,7 +9,7 @@ export function UiColorRampPreview({ parentRef }) {
     const wrappertRef = useRef(null);
 
     useEffect(() => {
-        getAndProcessFragShader('/public/glsl/color_ramp.frag.glsl', (fragShaderInfo:FragShaderInfo) => {
+        getAndProcessFragShader('/glsl/color_ramp.frag.glsl', (fragShaderInfo:FragShaderInfo) => {
             setWglApp(
                 initGlApp(wrappertRef.current.querySelector("canvas"), fragShaderInfo, ()=>true)
             );
