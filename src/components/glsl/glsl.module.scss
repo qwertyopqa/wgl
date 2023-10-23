@@ -1,0 +1,64 @@
+.glslCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.glslCanvasUI {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100vw;
+    display: flex;
+    align-items: end;
+}
+
+.uiSlider {
+  display: inline-flex;
+  margin: 5px 20px;
+  label {
+    display: inline-block;
+    font-size: 9px;
+    text-transform: uppercase;
+    max-width: 60px;
+    overflow: hidden;
+    text-align: right;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    width: 100px; /* Full-width */
+    height: 9px; /* Specified height */
+    background: rgba(255,255,255,0.5); /* Grey background */
+    outline: none; /* Remove outline */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+    position:relative;
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none; /* Override default look */
+      appearance: none;
+      width: 5px; /* Set a specific slider handle width */
+      height: 9px; /* Slider handle height */
+      background: #fff; /* Green background */
+      cursor: pointer; /* Cursor on hover */
+    }
+    &::-moz-range-thumb {
+      width: 5px; /* Set a specific slider handle width */
+      height: 9px; /* Slider handle height */
+      background: #fff; /* Green background */
+      cursor: pointer; /* Cursor on hover */
+    }
+  }
+}
+
+.uiColorRamp {
+  display: inline-flex;
+  flex-flow: column;
+  align-items: end;
+  > div {
+    margin-top: -1px;
+    margin-bottom: 0px;
+  }
+}
