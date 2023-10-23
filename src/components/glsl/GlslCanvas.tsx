@@ -7,13 +7,7 @@ import type { tickCallback, FragShaderInfo, Info } from './wglapp.ts';
 import {UiSlider} from './ui/UiSlider.tsx';
 import {UiColorRamp} from './ui/UiColorRamp.tsx';
 
-
-
 let init = false;
-
-type Args = {
-    frag: string;
-}
 
 export default function GlslCanvas({ frag }) {
     const [wglApp, setWglApp] = useState(null);
@@ -88,9 +82,25 @@ export default function GlslCanvas({ frag }) {
         setUniformCtrls(ctrls);
     }
 
+    function injectQueryParams(fragShaderInfo) {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        Object.keys(params).forEach((key) => {
+            if (key in fragShaderInfo.uniforms.custom) {
+                const u = fragShaderInfo.uniforms.custom[key];
+                if (u.type === "vec3") {
+                    fragShaderInfo.uniforms.custom[key].value.current = params[key].split(",").map((v) => Number(v));
+                }
+                if (u.type === "float" || u.type === "int") {
+                    fragShaderInfo.uniforms.custom[key].value.current = Number(params[key]);
+                }
+            }
+        });
+    }
+
     useEffect(() => {
         getAndProcessFragShader(shaderURL, (fragShaderInfo:FragShaderInfo) => {
-            window.info = fragShaderInfo;
+            injectQueryParams(fragShaderInfo);
             start(fragShaderInfo);
             processUniformInfo(fragShaderInfo);
         });

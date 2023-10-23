@@ -12,7 +12,7 @@ int divs = 4; // @uniform slider(1,16,1)
 int iterations = 8; // @uniform slider(1,20,1)
 float main_rotation = .0; // @uniform slider(-1,1,.1)
 vec3 color_ramp = vec3(.1, .2, .3); // @uniform colorRamp()
-vec3 color_ramp2 = vec3(1., .8, .6); // @uniform colorRamp()
+vec3 color_ramp2 = vec3(1., .8, .6);
 
 float n_sin(float x) {
     return sin(x) * .5 + .5;

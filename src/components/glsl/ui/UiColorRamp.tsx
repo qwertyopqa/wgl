@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { UniformCtrlInfo } from "../wglapp";
 import {UiSlider} from './UiSlider.tsx';
+import {UiColorRampPreview} from './UiColorRampPreview.tsx';
 import styles from '../glsl.module.scss';
 
 export function UiColorRamp({ name, value, onChange }) {
+    const wrapperRef = useRef(null);
+    const [key, setKey] = useState(0);
     const [rampComps, setRampComps] = useState([]);
     const [rampValue, setRampValue] = useState(value);
-    const [rampName, setRampName] = useState(name);
+    const [canvasCallback, setCanvasCallback] = useState(null);
 
     function getInfoFor(key:string, value:any) {
         return {
@@ -16,33 +19,40 @@ export function UiColorRamp({ name, value, onChange }) {
         };
     }
 
-    function onSliderUpdate(key:string, value:any) {
+    function onSliderUpdate(key:string, value:any, cb:any) {
         let values = rampValue;
         values["RGB".indexOf(key)] = Number(value);
         setRampValue(values);
+        const updtEvent = new CustomEvent("updated", {
+            bubbles: false,
+            detail: { values },
+          });
+        wrapperRef.current.dispatchEvent(updtEvent);
         return values;
     }
 
     useEffect(() => {
         setRampValue(value);
-        setRampName(name);
         setRampComps([
-            UiSlider.new("colorRamp"+name+"R", getInfoFor("R", value[0]), (value) => {
-                onChange(onSliderUpdate("R", value));
+            UiSlider.new("colorRamp-R", getInfoFor("R", value[0]), (v) => {
+                onChange(onSliderUpdate("R", v, canvasCallback));
             }),
-            UiSlider.new("colorRamp"+name+"G", getInfoFor("G", value[1]), (value) => {
-                onChange(onSliderUpdate("G", value));
+            UiSlider.new("colorRamp-G", getInfoFor("G", value[1]), (v) => {
+                onChange(onSliderUpdate("G", v, canvasCallback));
             }),
-            UiSlider.new("colorRamp"+name+"B", getInfoFor("B", value[2]), (value) => {
-                onChange(onSliderUpdate("B", value));
+            UiSlider.new("colorRamp-B", getInfoFor("B", value[2]), (v) => {
+                onChange(onSliderUpdate("B", v, canvasCallback));
             })
         ]);
-    }, [value, name, onChange]);
+    }, [value, onChange, canvasCallback]);
 
 
     return (
-        <div className={styles.uiColorRamp}>
-            {rampComps}
+        <div ref={wrapperRef} className={styles.uiColorRamp} data-v={rampValue} >
+            <UiColorRampPreview parentRef={wrapperRef}/>
+            <div className={styles.uiColorRampComps}>
+                {rampComps}
+            </div>
         </div>
     );
 }
