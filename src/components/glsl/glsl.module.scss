@@ -15,23 +15,66 @@
     align-items: end;
 }
 
+.uiPanel {
+  position: relative;
+  border: 1px solid #fff;
+  border-top: 0;
+  margin: 5px 10px;
+  > label {
+    display: flex;
+    font-size: 9px;
+    margin: -7px 0;
+    padding-left: 6px;
+    text-transform: uppercase;
+    pointer-events: none;
+    color:#fff;
+    > span {
+      display: inline-block;
+      background: #fff;
+      flex-grow: 1;
+      height: 1px;
+      margin-top: 7px;
+      margin-left: 6px;
+    }
+  }
+}
+
+.uiPanelContent {
+  display: inline-flex;
+  flex-flow: column;
+  align-items: end;
+  margin: 0px 5px 5px;
+  &[data-orientation=">"] {
+    flex-flow: row;
+    align-items: center;
+  }
+  > [rel="panel"] {
+    margin: 10px 0 0;
+  }
+}
+
 .uiSlider {
   display: inline-flex;
-  margin: 5px 20px;
+  margin: 1px 0px;
+  width: 100%;
   label {
     display: inline-block;
     font-size: 9px;
     text-transform: uppercase;
-    max-width: 60px;
-    overflow: hidden;
-    text-align: right;
+    max-width: 100px;
+    position: absolute;
+    z-index: 1;
+    padding: 1px 4px;
+    pointer-events: none;
+    color:#000;
   }
   input[type="range"] {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
-    width: 100px; /* Full-width */
-    height: 9px; /* Specified height */
-    background: rgba(255,255,255,0.5); /* Grey background */
+    width:100%;
+    min-width: 100px;
+    height: 13px; /* Specified height */
+    background: rgba(255,255,255,0.7); /* Grey background */
     outline: none; /* Remove outline */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
@@ -39,14 +82,14 @@
     &::-webkit-slider-thumb {
       -webkit-appearance: none; /* Override default look */
       appearance: none;
-      width: 5px; /* Set a specific slider handle width */
-      height: 9px; /* Slider handle height */
+      width: 10px; /* Set a specific slider handle width */
+      height: 13px; /* Slider handle height */
       background: #fff; /* Green background */
       cursor: pointer; /* Cursor on hover */
     }
     &::-moz-range-thumb {
-      width: 5px; /* Set a specific slider handle width */
-      height: 9px; /* Slider handle height */
+      width: 10px; /* Set a specific slider handle width */
+      height: 13px; /* Slider handle height */
       background: #fff; /* Green background */
       cursor: pointer; /* Cursor on hover */
     }
@@ -63,17 +106,13 @@
   display: inline-flex;
   flex-flow: column;
   align-items: end;
-  > div {
-    margin-top: -1px;
-    margin-bottom: 0px;
-  }
 }
 
 .uiColorRampPreview {
-  width: calc(100% - 40px);
+  width: calc(100% - 4px);
   height: 20px;
   position: relative;
-  margin: 5px 20px;
+  margin: 10px 2px 3px;
   canvas {
     position: absolute;
     top: 0;

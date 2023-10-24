@@ -46,5 +46,6 @@ UiSlider.new = (key:string, info:UniformCtrlInfo, onChange:(value:any)=>void) =>
         max={info.args[1]}
         step={info.args[2]}
         onChange={onChange}
+        rel="ui"
     />
 };

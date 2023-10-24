@@ -19,6 +19,9 @@ export type FragShaderInfo = {
         custom: {
             [key:string]:UniformCtrlInfo
         }
+    },
+    panels: {
+        [key:string]:any
     }
 }
 
@@ -213,6 +216,7 @@ function processFragShader(source:string) {
             std: [],
             custom: {}
         },
+        panels:{},
         source,
     };
     if (source.indexOf('#version 300 es') >= 0) {
@@ -250,6 +254,14 @@ function processFragShader(source:string) {
                 args: reB[2].split(',').map((s:string) => Number(s.trim()))
             };
             line = `uniform ${reA[1]} ${reA[2]};`;
+        }
+        if (line.indexOf('@panel ') > 0) {
+            const re = /\/\/@panel \s*(V|>)\s(\S*)\s*\[(.*)\]/.exec(line);
+            info.panels[re[2]] = {
+                orientation: re[1],
+                label: re[2],
+                children: re[3].split(',').map((s:string) => s.trim())
+            };
         }
         return line;
     });

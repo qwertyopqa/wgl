@@ -25,7 +25,7 @@ export function UiColorRampPreview({ parentRef }) {
     }, [parentRef, wglApp]);
 
 
-    return (<div ref={wrappertRef} className={styles.uiColorRampPreview}>
+    return (<div ref={wrappertRef} className={styles.uiColorRampPreview} rel="panel">
         <canvas></canvas>
     </div>);
 }

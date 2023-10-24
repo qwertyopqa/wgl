@@ -8,14 +8,24 @@ uniform vec2 u_resolution;
 uniform float u_time;
 out vec4 fragColor;
 
+//@panel V Tiles [t_number, t_zoom]
+//@panel V Main [divs, iterations, rotation, Tiles]
+
+//@panel > Color [color_ramp]
+
+float t_number = .2; // @uniform slider(.1,3.,.01)
+float t_zoom = 1.; // @uniform slider(.5,3.,.1)
 int divs = 4; // @uniform slider(1,16,1)
 int iterations = 8; // @uniform slider(1,20,1)
-float main_rotation = .0; // @uniform slider(-1,1,.1)
+float rotation = .0; // @uniform slider(-1,1,.1)
 vec3 color_ramp = vec3(.1, .2, .3); // @uniform colorRamp()
 vec3 color_ramp2 = vec3(1., .8, .6);
 
 float n_sin(float x) {
     return sin(x) * .5 + .5;
+}
+vec2 n_sin(vec2 p) {
+    return sin(p) * .5 + .5;
 }
 float n_tri(float x) {
     float m1 = mod(x, .5);
@@ -28,7 +38,7 @@ vec3 getRamp(float p) {
 }
 
 void _cNP(inout vec2 p, inout float a, float s ) {
-    float tp = n_sin((u_time + s * -.1 ) * .5 + s * .1  ) ;
+    float tp = n_sin(((u_time + s * -.1 ) * .7 ) * .5 + s * .1  ) ;
     float ti = n_sin(u_time * .25) ;
 
     //p -= vec2(n_sin(ti * M_PI2), n_sin(tp / s)) / s;
@@ -70,11 +80,23 @@ vec3 getIteratorColor(vec2 p) {
     vec3 col = (p.x > 0. && p.y < 0.0001) ? vec3(.1) : vec3(.0);
     float a = 0.;
     for (float i = 0.; i < float(iterations); i += 1.) {
+        /*
+        vec2 np = vec2(p);
+        float na = a + 0.;
+         _cNP(np, na, i + 1.);
+        vec2 op =  vec2(p);
+        float oa = a + 0.;
+        _ocNP(op, oa, i + 1.);
+        float mixp = n_sin(i * .25 - n_sin(u_time * .1)) ;
+        p = mix(np, op, mixp);
+        a = mix(na, oa, mixp);
+        */
         if (mod(i, 2.) < 1.) {
             _cNP(p, a, i + 1.);
         } else {
             _ocNP(p, a, i + 1.);
         }
+
         colorize(col, p, i, a);
     }
     return col;
@@ -82,7 +104,6 @@ vec3 getIteratorColor(vec2 p) {
 
 void getQuadrantColor(vec2 p, float a, inout vec3 col) {
     float divS = M_PI2 / (float(divs) * 2.);
-
     float l = length(p);
     //a += sin(u_time * 2.) * (.5 - l) * .5 ;
     a = mod(a , M_PI2);
@@ -103,7 +124,9 @@ void getQuadrantColor(vec2 p, float a, inout vec3 col) {
 void main()
 {
     vec2 p = gl_FragCoord.xy / u_resolution.x - vec2(.5) * vec2(1., u_resolution.y / u_resolution.x);
-    float a = atan(p.y, p.x) + M_PI * .5 + u_time * main_rotation;
+    p = sin(p * M_PI2 * t_number);
+    float a = atan(p.y, p.x) + M_PI * .5 + u_time * rotation;
+    p/= t_zoom + t_number;
     vec3 col = vec3(0.);
     getQuadrantColor(p, a, col);
     fragColor = vec4(col, 1.);
